@@ -12,18 +12,15 @@
 
 <script>
 import {getAPI} from "@/axios-api";
+import {mapState} from "vuex";
 
   export default {
     name: 'AccountsTest',
-
-    data: () => ({
-      APIData: []
-    }),
+    computed: mapState(['APIData']),
     created() {
-      getAPI.get('/accounts/',)
+      getAPI.get('/accounts/', {headers: {Authorization: `Bearer ${this.$store.state.accessToken}`}})
           .then(response => {
-            console.log('API work')
-            this.APIData = response.data
+            this.$store.state.APIData = response.data
           })
           .catch(err => {
             console.log(err)
