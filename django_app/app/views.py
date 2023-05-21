@@ -1,15 +1,22 @@
 from rest_framework.response import Response
 from rest_framework import generics
-from .models import Account
-from .serializers import AccountSerializer
-from rest_framework.permissions import IsAuthenticated
+from .models import Expense, Category
+from .serializers import ExpenseSerializer, CategorySerializer
 
 
-class AccountsView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)
-    queryset = Account.objects.all()
+class ExpenseView(generics.RetrieveAPIView):
+    queryset = Expense.objects.all()
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        serializer = AccountSerializer(queryset, many=True)
+        serializer = ExpenseSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class CategoryView(generics.RetrieveAPIView):
+    queryset = Category.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = CategorySerializer(queryset, many=True)
         return Response(serializer.data)
