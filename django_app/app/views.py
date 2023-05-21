@@ -1,22 +1,23 @@
-from rest_framework.response import Response
-from rest_framework import generics
 from .models import Expense, Category
 from .serializers import ExpenseSerializer, CategorySerializer
+from rest_framework import mixins, viewsets
 
 
-class ExpenseView(generics.RetrieveAPIView):
+class ExpenseViewSet(mixins.RetrieveModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.CreateModelMixin,
+                     mixins.UpdateModelMixin,
+                     mixins.DestroyModelMixin,
+                     viewsets.GenericViewSet):
     queryset = Expense.objects.all()
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = ExpenseSerializer(queryset, many=True)
-        return Response(serializer.data)
+    serializer_class = ExpenseSerializer
 
 
-class CategoryView(generics.RetrieveAPIView):
+class CategoryViewSet(mixins.RetrieveModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.CreateModelMixin,
+                     mixins.UpdateModelMixin,
+                     mixins.DestroyModelMixin,
+                     viewsets.GenericViewSet):
     queryset = Category.objects.all()
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = CategorySerializer(queryset, many=True)
-        return Response(serializer.data)
+    serializer_class = CategorySerializer
