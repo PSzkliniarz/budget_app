@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     accessToken: null,
     refreshToken: null,
-    APIData: ''
+    APIData: '',
+    category: ''
   },
   getters: {
     loggedIn (state) {

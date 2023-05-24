@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 class Category (models.Model):
 
     name = models.CharField(max_length=250, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
