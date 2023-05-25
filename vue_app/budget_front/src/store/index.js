@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {getAPI} from "@/axios-api";
+import axiosInstance from "@/axios-api";
 
 Vue.use(Vuex)
 
@@ -34,16 +34,17 @@ export default new Vuex.Store({
     },
     userLogin(context, userCredentials) {
       return new Promise((resolve) => {
-        getAPI.post('/api-token/', {
+        axiosInstance.post('/api-token/', {
           username: userCredentials.username,
           password: userCredentials.password
         })
             .then(response => {
-              context.commit('updateStorage', {access: response.data.access, refresh: response.data.refresh})
-              resolve()
-            })
-      })
-    }
+              context.commit('updateStorage', {access: response.data.access, refresh: response.data.refresh});
+              resolve();
+            });
+      });
+}
+
   },
   modules: {
   }
