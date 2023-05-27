@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {getAPI} from "@/axios-api";
+import axiosInstance from "@/axios-api";
 
 Vue.use(Vuex)
 
@@ -8,13 +8,16 @@ export default new Vuex.Store({
   state: {
     accessToken: null,
     refreshToken: null,
-    APIData: '',
-    category: ''
+
+    expenses: '',
+    categories: ''
   },
   getters: {
     loggedIn (state) {
       return state.accessToken != null
-    }
+    },
+    getExpenses:(state) => state.expenses,
+    getCategories:(state) => state.categories,
   },
   mutations: {
     updateStorage(state, {access, refresh}) {
@@ -24,6 +27,13 @@ export default new Vuex.Store({
     destroyToken (state) {
       state.accessToken = null
       state.refreshToken = null
+    },
+
+    SET_EXPENSES(state, payload){
+      state.expenses = payload
+    },
+    SET_CATEGORIES(state, payload){
+      state.categories = payload
     }
   },
   actions: {
@@ -34,16 +44,35 @@ export default new Vuex.Store({
     },
     userLogin(context, userCredentials) {
       return new Promise((resolve) => {
-        getAPI.post('/api-token/', {
+        axiosInstance.post('/api-token/', {
           username: userCredentials.username,
           password: userCredentials.password
         })
             .then(response => {
-              context.commit('updateStorage', {access: response.data.access, refresh: response.data.refresh})
-              resolve()
-            })
-      })
+              context.commit('updateStorage', {access: response.data.access, refresh: response.data.refresh});
+              resolve();
+            });
+      });
+    },
+    loadExpenses ({commit}) {
+      axiosInstance.get('/expense/')
+        .then(response => {
+          commit('SET_EXPENSES', response.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    loadCategories ({commit}) {
+      axiosInstance.get('/category/')
+        .then(response => {
+          commit('SET_CATEGORIES', response.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
+
   },
   modules: {
   }
