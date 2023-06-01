@@ -39,7 +39,7 @@ export default {
         {text: 'Nazwa', value: 'title'},
         {text: 'Wartość', value: 'amount'},
         {text: 'Data', value: 'data'},
-        {text: 'Kategoria', value: 'category'},
+        {text: 'Kategoria', value: 'category_name'},
       ]
     },
   },

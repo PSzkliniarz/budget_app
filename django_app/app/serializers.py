@@ -3,6 +3,8 @@ from . models import Expense, Category
 
 
 class ExpenseSerializer(serializers.ModelSerializer):
+    category_name = serializers.CharField(source='category.name', read_only=True)
+
     class Meta:
         model = Expense
         fields = '__all__'
@@ -16,6 +18,7 @@ class ExpenseSerializer(serializers.ModelSerializer):
     #     if user.is_authenticated:
     #         validated_data['user'] = user
     #     return super().create(validated_data)
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
