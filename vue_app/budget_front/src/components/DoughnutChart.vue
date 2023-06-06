@@ -1,5 +1,10 @@
 <template>
   <div class="chart-container">
+    <h2>test</h2>
+    {{ filteredExpenses }}
+    <div class="filter-container">
+      <v-select v-model="selectedPeriod" :items="periodOptions" label="Select Period" @change="filterExpenses "/>
+    </div>
     <Doughnut :data="chartData" :options="chartOptions"/>
   </div>
 </template>
@@ -37,6 +42,15 @@ export default {
         responsive: true,
       };
     },
+    periodOptions() {
+      return ['Current Month', 'Current Week'];
+    },
+  },
+  data() {
+    return {
+      selectedPeriod: 'Current Month',
+      filteredExpenses: [],
+    };
   },
 
   methods: {
@@ -46,7 +60,7 @@ export default {
       const amounts = [];
       const colors = [];
 
-      for (const expense of this.getExpenses) {
+      for (const expense of this.filteredExpenses) {
         const categoryName = expense.category_name;
         const amount = expense.amount;
 
@@ -68,6 +82,41 @@ export default {
         amounts,
         colors,
       };
+    },
+    filterExpenses() {
+      if (Array.isArray(this.getExpenses)) {
+        const currentDate = new Date();
+
+        if (this.selectedPeriod === 'Current Month') {
+          const currentMonth = currentDate.getMonth() + 1;
+          const currentYear = currentDate.getFullYear();
+          this.filteredExpenses = this.getExpenses.filter((expense) => {
+            const expenseDate = new Date(expense.data);
+            const expenseMonth = expenseDate.getMonth() + 1;
+            const expenseYear = expenseDate.getFullYear();
+            return expenseMonth === currentMonth && expenseYear === currentYear;
+          });
+        } else if (this.selectedPeriod === 'Current Week') {
+          const currentDay = currentDate.getDate();
+          const currentWeekStart = currentDay - currentDate.getDay();
+          const currentWeekEnd = currentWeekStart + 6;
+          this.filteredExpenses = this.getExpenses.filter((expense) => {
+            const expenseDate = new Date(expense.data);
+            const expenseDay = expenseDate.getDate();
+            return expenseDay >= currentWeekStart && expenseDay <= currentWeekEnd;
+          });
+        }
+      } else {
+        this.filteredExpenses = [];
+      }
+    },
+
+  },
+  watch: {
+    getExpenses(newExpenses) {
+      if (newExpenses.length > 0) {
+        this.filterExpenses();
+      }
     },
   },
 };
