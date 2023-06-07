@@ -4,8 +4,12 @@
     {{ filteredExpenses }}
     <div class="filter-container">
       <v-select v-model="selectedPeriod" :items="periodOptions" label="Select Period" @change="filterExpenses "/>
+      <button @click="showPreviousPeriod">Poprzedni okres</button>
+      <button @click="showNextPeriod">Następny okres</button>
+      {{startData}}
     </div>
-    <Doughnut :data="chartData" :options="chartOptions"/>
+    <Doughnut v-if="filteredExpenses.length > 0" :data="chartData" :options="chartOptions"/>
+    <h2 v-if="filteredExpenses.length === 0">Brak wydatków w tym okresie</h2>
   </div>
 </template>
 
@@ -22,6 +26,7 @@ export default {
 
   computed: {
     ...mapGetters(['getExpenses']),
+
 
     chartData() {
       const categoryData = this.getCategoryData();
@@ -50,6 +55,7 @@ export default {
     return {
       selectedPeriod: 'Current Month',
       filteredExpenses: [],
+      startData: new Date()
     };
   },
 
@@ -85,7 +91,7 @@ export default {
     },
     filterExpenses() {
       if (Array.isArray(this.getExpenses)) {
-        const currentDate = new Date();
+        const currentDate = this.startData
 
         if (this.selectedPeriod === 'Current Month') {
           const currentMonth = currentDate.getMonth() + 1;
@@ -110,7 +116,26 @@ export default {
         this.filteredExpenses = [];
       }
     },
-
+showPreviousPeriod() {
+      if (this.selectedPeriod === 'Current Month') {
+        const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth() - 1, 1);
+        this.startData = previousMonth;
+      } else if (this.selectedPeriod === 'Current Week') {
+        const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth(), this.startData.getDate() - 7);
+        this.startData = previousMonth;
+      }
+      this.filterExpenses();
+    },
+showNextPeriod() {
+      if (this.selectedPeriod === 'Current Month') {
+        const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth() + 1, 1);
+        this.startData = previousMonth;
+      } else if (this.selectedPeriod === 'Current Week') {
+        const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth(), this.startData.getDate() + 7);
+        this.startData = previousMonth;
+      }
+      this.filterExpenses();
+    },
   },
   watch: {
     getExpenses(newExpenses) {
