@@ -1,17 +1,22 @@
 <template>
-  <div class="chart-container">
-    <h2>test</h2>
-    {{ filteredExpenses }}
+  <v-card class="chart-container">
     <div class="filter-container">
       <v-select v-model="selectedPeriod" :items="periodOptions" label="Select Period" @change="filterExpenses "/>
-      <button @click="showPreviousPeriod">Poprzedni okres</button>
-      <button @click="showNextPeriod">Następny okres</button>
-      {{ startData }}
     </div>
-    <Doughnut v-if="filteredExpenses.length > 0" :data="chartData" :options="chartOptions"/>
-    <h2 v-if="filteredExpenses.length === 0">Brak wydatków w tym okresie</h2>
-    {{ periodSum }}
-  </div>
+    <div class="doughnut-div">
+      <Doughnut v-if="filteredExpenses.length > 0" :data="chartData" :options="chartOptions" class="doughnut-chart"/>
+      <h2 v-if="filteredExpenses.length === 0">Brak wydatków w tym okresie</h2>
+      <span class="period-sum">{{ periodSum }}</span>
+    </div>
+    <div class="chart-navigation">
+      <button @click="showPreviousPeriod">Poprzedni okres</button>
+      <div class="date-div">
+        {{ prettyDate }}
+      </div>
+
+      <button @click="showNextPeriod">Następny okres</button>
+    </div>
+  </v-card>
 </template>
 
 <script>
@@ -52,6 +57,15 @@ export default {
     },
     periodSum() {
       return this.filteredExpenses.reduce((acc, obj) => acc + obj.amount, 0)
+    },
+    prettyDate() {
+      const date = this.startData;
+
+      const day = String(date.getDate()).padStart(2, '0'); // Pobranie dnia miesiąca i dodanie wiodącego zera
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Pobranie miesiąca (indeksowanej od 0) i dodanie wiodącego zera
+      const year = date.getFullYear(); // Pobranie roku
+
+      return `${day}/${month}/${year}`;
     }
   },
   data() {
@@ -163,9 +177,38 @@ function getRandomColor() {
 
 <style>
 .chart-container {
-  width: 100%;
-  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.doughnut-chart {
+  max-height: 500px;
+}
+
+.chart-navigation {
   display: flex;
   justify-content: center;
+}
+
+.doughnut-div {
+  position: relative;
+}
+
+.period-sum {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 3.5rem;
+}
+.date-div {
+  margin-top: 20px;
+}
+
+button {
+  margin: 20px;
+  border: 1px solid black;
 }
 </style>

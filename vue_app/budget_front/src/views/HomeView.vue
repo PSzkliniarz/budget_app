@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <AccountsTest/>
+  <div style="background-color: #f1f1f1">
+<!--    <AccountsTest/>-->
     <DoughnutChart />
     <ExpenseTable/>
   </div>
 </template>
 
 <script>
-  import AccountsTest from "@/components/Accounts";
+  // import AccountsTest from "@/components/Accounts";
   import DoughnutChart from "@/components/DoughnutChart";
   import ExpenseTable from "@/components/ExpenseTable";
 
@@ -17,7 +17,7 @@
     components: {
       DoughnutChart,
       ExpenseTable,
-      AccountsTest,
+      // AccountsTest,
     },
   }
 </script>
