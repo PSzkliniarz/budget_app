@@ -1,13 +1,28 @@
 <template>
-  <div class="chart-container">
-    <Doughnut :data="chartData" :options="chartOptions"/>
-  </div>
+  <v-card class="chart-container">
+    <div class="filter-container">
+      <v-select v-model="selectedPeriod" :items="periodOptions" label="Select Period" @change="filterExpenses "/>
+    </div>
+    <div class="doughnut-div">
+      <Doughnut v-if="filteredExpenses.length > 0" :data="chartData" :options="chartOptions" class="doughnut-chart"/>
+      <h2 v-if="filteredExpenses.length === 0">Brak wydatków w tym okresie</h2>
+      <span class="period-sum">{{ periodSum }}</span>
+    </div>
+    <div class="chart-navigation">
+      <button @click="showPreviousPeriod">Poprzedni okres</button>
+      <div class="date-div">
+        {{ prettyDate }}
+      </div>
+
+      <button @click="showNextPeriod">Następny okres</button>
+    </div>
+  </v-card>
 </template>
 
 <script>
 import {Doughnut} from 'vue-chartjs';
 import {Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale} from 'chart.js';
-import {mapGetters} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
@@ -37,16 +52,39 @@ export default {
         responsive: true,
       };
     },
+    periodOptions() {
+      return ['Current Month', 'Current Week'];
+    },
+    periodSum() {
+      return this.filteredExpenses.reduce((acc, obj) => acc + obj.amount, 0)
+    },
+    prettyDate() {
+      const date = this.startData;
+
+      const day = String(date.getDate()).padStart(2, '0'); // Pobranie dnia miesiąca i dodanie wiodącego zera
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Pobranie miesiąca (indeksowanej od 0) i dodanie wiodącego zera
+      const year = date.getFullYear(); // Pobranie roku
+
+      return `${day}/${month}/${year}`;
+    }
+  },
+  data() {
+    return {
+      selectedPeriod: 'Current Month',
+      filteredExpenses: [],
+      startData: new Date()
+    };
   },
 
   methods: {
+    ...mapActions(['setActualExpenses']),
     getCategoryData() {
       const categories = {};
       const labels = [];
       const amounts = [];
       const colors = [];
 
-      for (const expense of this.getExpenses) {
+      for (const expense of this.filteredExpenses) {
         const categoryName = expense.category_name;
         const amount = expense.amount;
 
@@ -69,6 +107,61 @@ export default {
         colors,
       };
     },
+    filterExpenses() {
+      if (Array.isArray(this.getExpenses)) {
+        const currentDate = this.startData
+
+        if (this.selectedPeriod === 'Current Month') {
+          const currentMonth = currentDate.getMonth() + 1;
+          const currentYear = currentDate.getFullYear();
+          this.filteredExpenses = this.getExpenses.filter((expense) => {
+            const expenseDate = new Date(expense.data);
+            const expenseMonth = expenseDate.getMonth() + 1;
+            const expenseYear = expenseDate.getFullYear();
+            return expenseMonth === currentMonth && expenseYear === currentYear;
+          });
+        } else if (this.selectedPeriod === 'Current Week') {
+          const currentDay = currentDate.getDate();
+          const currentWeekStart = currentDay - currentDate.getDay();
+          const currentWeekEnd = currentWeekStart + 6;
+          this.filteredExpenses = this.getExpenses.filter((expense) => {
+            const expenseDate = new Date(expense.data);
+            const expenseDay = expenseDate.getDate();
+            return expenseDay >= currentWeekStart && expenseDay <= currentWeekEnd;
+          });
+        }
+      } else {
+        this.filteredExpenses = [];
+      }
+      this.setActualExpenses(this.filteredExpenses)
+    },
+    showPreviousPeriod() {
+      if (this.selectedPeriod === 'Current Month') {
+        const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth() - 1, 1);
+        this.startData = previousMonth;
+      } else if (this.selectedPeriod === 'Current Week') {
+        const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth(), this.startData.getDate() - 7);
+        this.startData = previousMonth;
+      }
+      this.filterExpenses();
+    },
+    showNextPeriod() {
+      if (this.selectedPeriod === 'Current Month') {
+        const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth() + 1, 1);
+        this.startData = previousMonth;
+      } else if (this.selectedPeriod === 'Current Week') {
+        const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth(), this.startData.getDate() + 7);
+        this.startData = previousMonth;
+      }
+      this.filterExpenses();
+    },
+  },
+  watch: {
+    getExpenses(newExpenses) {
+      if (newExpenses.length > 0) {
+        this.filterExpenses();
+      }
+    },
   },
 };
 
@@ -84,9 +177,38 @@ function getRandomColor() {
 
 <style>
 .chart-container {
-  width: 100%;
-  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.doughnut-chart {
+  max-height: 500px;
+}
+
+.chart-navigation {
   display: flex;
   justify-content: center;
+}
+
+.doughnut-div {
+  position: relative;
+}
+
+.period-sum {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 3.5rem;
+}
+.date-div {
+  margin-top: 20px;
+}
+
+button {
+  margin: 20px;
+  border: 1px solid black;
 }
 </style>
