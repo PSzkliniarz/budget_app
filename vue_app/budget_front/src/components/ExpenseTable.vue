@@ -3,7 +3,7 @@
     <h1>Wydatki</h1>
     <v-data-table
         :headers="headers"
-        :items="getExpenses || []"
+        :items="getActualExpenses || []"
         :items-per-page="5"
         class="elevation-1"
         :search="search"
@@ -33,7 +33,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getExpenses']),
+    ...mapGetters(['getActualExpenses']),
     headers() {
       return [
         {text: 'Nazwa', value: 'title'},

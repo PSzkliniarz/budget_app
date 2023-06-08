@@ -6,17 +6,18 @@
       <v-select v-model="selectedPeriod" :items="periodOptions" label="Select Period" @change="filterExpenses "/>
       <button @click="showPreviousPeriod">Poprzedni okres</button>
       <button @click="showNextPeriod">Następny okres</button>
-      {{startData}}
+      {{ startData }}
     </div>
     <Doughnut v-if="filteredExpenses.length > 0" :data="chartData" :options="chartOptions"/>
     <h2 v-if="filteredExpenses.length === 0">Brak wydatków w tym okresie</h2>
+    {{ periodSum }}
   </div>
 </template>
 
 <script>
 import {Doughnut} from 'vue-chartjs';
 import {Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale} from 'chart.js';
-import {mapGetters} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
@@ -26,7 +27,6 @@ export default {
 
   computed: {
     ...mapGetters(['getExpenses']),
-
 
     chartData() {
       const categoryData = this.getCategoryData();
@@ -50,6 +50,9 @@ export default {
     periodOptions() {
       return ['Current Month', 'Current Week'];
     },
+    periodSum() {
+      return this.filteredExpenses.reduce((acc, obj) => acc + obj.amount, 0)
+    }
   },
   data() {
     return {
@@ -60,6 +63,7 @@ export default {
   },
 
   methods: {
+    ...mapActions(['setActualExpenses']),
     getCategoryData() {
       const categories = {};
       const labels = [];
@@ -115,8 +119,9 @@ export default {
       } else {
         this.filteredExpenses = [];
       }
+      this.setActualExpenses(this.filteredExpenses)
     },
-showPreviousPeriod() {
+    showPreviousPeriod() {
       if (this.selectedPeriod === 'Current Month') {
         const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth() - 1, 1);
         this.startData = previousMonth;
@@ -126,7 +131,7 @@ showPreviousPeriod() {
       }
       this.filterExpenses();
     },
-showNextPeriod() {
+    showNextPeriod() {
       if (this.selectedPeriod === 'Current Month') {
         const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth() + 1, 1);
         this.startData = previousMonth;

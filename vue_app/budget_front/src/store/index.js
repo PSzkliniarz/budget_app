@@ -10,7 +10,8 @@ export default new Vuex.Store({
     refreshToken: null,
 
     expenses: '',
-    categories: ''
+    categories: '',
+    actualExpenses: ''
   },
   getters: {
     loggedIn (state) {
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     },
     getExpenses:(state) => state.expenses,
     getCategories:(state) => state.categories,
+    getActualExpenses:(state) => state.actualExpenses
   },
   mutations: {
     updateStorage(state, {access, refresh}) {
@@ -34,6 +36,9 @@ export default new Vuex.Store({
     },
     SET_CATEGORIES(state, payload){
       state.categories = payload
+    },
+    SET_ACTUAL_EXPENSES(state, payload){
+      state.actualExpenses = payload
     }
   },
   actions: {
@@ -71,6 +76,9 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
+    },
+    setActualExpenses({commit}, actualExpenses) {
+      commit('SET_ACTUAL_EXPENSES', actualExpenses)
     }
 
   },
