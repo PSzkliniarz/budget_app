@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #f1f1f1">
+  <div style="background-color: #E3E3E3">
 <!--    <AccountsTest/>-->
     <DoughnutChart />
     <ExpenseTable/>
