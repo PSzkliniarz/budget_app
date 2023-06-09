@@ -1,7 +1,7 @@
 <template>
   <v-card class="chart-container">
     <div class="filter-container">
-      <v-select v-model="selectedPeriod" :items="periodOptions" label="Select Period" @change="filterExpenses "/>
+      <v-select v-model="selectedPeriod" :items="periodOptions" label="Wybierz okres" @change="filterExpenses "/>
     </div>
     <div class="doughnut-div">
       <Doughnut v-if="filteredExpenses.length > 0" :data="chartData" :options="chartOptions" class="doughnut-chart"/>
@@ -9,12 +9,12 @@
       <span class="period-sum">{{ periodSum }}</span>
     </div>
     <div class="chart-navigation">
-      <button @click="showPreviousPeriod">Poprzedni okres</button>
+      <button @click="showPreviousPeriod">poprzedni okres</button>
       <div class="date-div">
         {{ prettyDate }}
       </div>
 
-      <button @click="showNextPeriod">Następny okres</button>
+      <button @click="showNextPeriod">następny okres</button>
     </div>
   </v-card>
 </template>
@@ -39,7 +39,7 @@ export default {
         labels: categoryData.labels,
         datasets: [
           {
-            label: 'Amount',
+            label: 'Suma:',
             backgroundColor: categoryData.colors,
             data: categoryData.amounts,
           },
@@ -53,7 +53,7 @@ export default {
       };
     },
     periodOptions() {
-      return ['Current Month', 'Current Week'];
+      return ['Miesiąc', 'Tydzień'];
     },
     periodSum() {
       return this.filteredExpenses.reduce((acc, obj) => acc + obj.amount, 0)
@@ -62,7 +62,7 @@ export default {
       const date = this.startData;
 
       const day = String(date.getDate()).padStart(2, '0'); // Pobranie dnia miesiąca i dodanie wiodącego zera
-      const month = String(date.getMonth() + 1).padStart(2, '0'); // Pobranie miesiąca (indeksowanej od 0) i dodanie wiodącego zera
+      const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear(); // Pobranie roku
 
       return `${day}/${month}/${year}`;
@@ -70,7 +70,7 @@ export default {
   },
   data() {
     return {
-      selectedPeriod: 'Current Month',
+      selectedPeriod: 'Miesiąc',
       filteredExpenses: [],
       startData: new Date()
     };
@@ -111,7 +111,7 @@ export default {
       if (Array.isArray(this.getExpenses)) {
         const currentDate = this.startData
 
-        if (this.selectedPeriod === 'Current Month') {
+        if (this.selectedPeriod === 'Miesiąc') {
           const currentMonth = currentDate.getMonth() + 1;
           const currentYear = currentDate.getFullYear();
           this.filteredExpenses = this.getExpenses.filter((expense) => {
@@ -120,7 +120,7 @@ export default {
             const expenseYear = expenseDate.getFullYear();
             return expenseMonth === currentMonth && expenseYear === currentYear;
           });
-        } else if (this.selectedPeriod === 'Current Week') {
+        } else if (this.selectedPeriod === 'Tydzień') {
           const currentDay = currentDate.getDate();
           const currentWeekStart = currentDay - currentDate.getDay();
           const currentWeekEnd = currentWeekStart + 6;
@@ -136,20 +136,20 @@ export default {
       this.setActualExpenses(this.filteredExpenses)
     },
     showPreviousPeriod() {
-      if (this.selectedPeriod === 'Current Month') {
+      if (this.selectedPeriod === 'Miesiąc') {
         const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth() - 1, 1);
         this.startData = previousMonth;
-      } else if (this.selectedPeriod === 'Current Week') {
+      } else if (this.selectedPeriod === 'Tydzień') {
         const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth(), this.startData.getDate() - 7);
         this.startData = previousMonth;
       }
       this.filterExpenses();
     },
     showNextPeriod() {
-      if (this.selectedPeriod === 'Current Month') {
+      if (this.selectedPeriod === 'Miesiąc') {
         const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth() + 1, 1);
         this.startData = previousMonth;
-      } else if (this.selectedPeriod === 'Current Week') {
+      } else if (this.selectedPeriod === 'Tydzień') {
         const previousMonth = new Date(this.startData.getFullYear(), this.startData.getMonth(), this.startData.getDate() + 7);
         this.startData = previousMonth;
       }
@@ -175,7 +175,7 @@ function getRandomColor() {
 }
 </script>
 
-<style>
+<style scoped>
 .chart-container {
   display: flex;
   flex-direction: column;
@@ -183,7 +183,7 @@ function getRandomColor() {
 }
 
 .doughnut-chart {
-  max-height: 500px;
+  max-height: 460px;
 }
 
 .chart-navigation {
@@ -203,12 +203,19 @@ function getRandomColor() {
   font-weight: bold;
   font-size: 3.5rem;
 }
+
 .date-div {
-  margin-top: 20px;
+  margin-top: 35px;
+  font-weight: bold;
+  font-size: large;
 }
 
 button {
   margin: 20px;
-  border: 1px solid black;
+  padding: 1% 3%;
+  border-radius: 10px;
+  background-color: #4094E1;
+  color: #FFFFFF;
+  font-width: bold;
 }
 </style>

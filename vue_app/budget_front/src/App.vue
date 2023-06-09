@@ -1,8 +1,10 @@
 <template>
   <v-app>
    <v-app-bar app>
-      <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Moja aplikacja</v-toolbar-title>
+      <v-app-bar-nav-icon @click="toggleDrawer" style="color: #4094E1; border: 3px solid #4094E1"/>
+      <v-toolbar-title style="width: 100%; text-align: center; font-size: 2rem; ">
+        Aplikacja <span style="color: #4094E1; font-weight: bold">Moje wydatki</span>
+      </v-toolbar-title>
     </v-app-bar>
 
     <v-navigation-drawer
@@ -42,6 +44,7 @@ export default {
       isMobile: false,
       menuItems: [
         { title: 'Strona główna', icon: 'mdi-home' },
+        { title: 'Twoje kategorie', icon: 'mdi-home' },
         { title: 'O nas', icon: 'mdi-information' },
         { title: 'Kontakt', icon: 'mdi-email' }
       ]
@@ -79,6 +82,9 @@ export default {
         case 'O nas':
           this.$router.push('/about');
           break;
+        case 'Twoje kategorie':
+          this.$router.push('/categories');
+          break;
         case 'Kontakt':
           this.$router.push('/logout');
           break;
@@ -94,5 +100,29 @@ export default {
 };
 </script>
 <style>
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../public/fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
+  /* Dodaj dodatkowe formaty czcionki, jeśli są dostępne */
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+.v-toolbar {
+  padding: 10px !important;
+  height: inherit !important;
+}
+
+.v-main {
+  background-color: #E3E3E3;
+}
+.v-card {
+  background-color: #f1f1f1 !important;
+  margin-top: 36px;
+  padding: 24px;
+  box-shadow: 5px 4px 39px rgba(0, 0, 0, 0.25) !important;
+}
+
 
 </style>

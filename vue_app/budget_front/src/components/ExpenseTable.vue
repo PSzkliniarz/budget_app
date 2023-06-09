@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <h1>Wydatki</h1>
+  <v-card>
+    <div class="table-header">
+      <h1>Wydatki</h1>
+      <button @click="addExpenseDialog = true">dodaj wydatek</button>
+    </div>
     <v-data-table
         :headers="headers"
         :items="getActualExpenses || []"
@@ -19,7 +22,7 @@
         {{ capitalize(item.title) }}
       </template>
     </v-data-table>
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -30,6 +33,7 @@ export default {
   data() {
     return {
       search: '',
+      addExpenseDialog: false,
     }
   },
   computed: {
@@ -57,4 +61,19 @@ export default {
 
 <style scoped>
 
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  margin: 20px;
+  margin-top: 0;
+  padding: 1% 3%;
+  border-radius: 10px;
+  background-color: #4094E1;
+  color: #FFFFFF;
+  font-width: bold;
+}
 </style>
