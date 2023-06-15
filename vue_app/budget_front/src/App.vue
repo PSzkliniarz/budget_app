@@ -1,7 +1,7 @@
 <template>
   <v-app>
    <v-app-bar app>
-      <v-app-bar-nav-icon @click="toggleDrawer" style="color: #4094E1; border: 3px solid #4094E1"/>
+      <v-app-bar-nav-icon @click="toggleDrawer" style="background-color: #FFFFFF; color: #4094E1; border: 3px solid #4094E1"/>
       <v-toolbar-title style="width: 100%; text-align: center; font-size: 2rem; ">
         Aplikacja <span style="color: #4094E1; font-weight: bold">Moje wydatki</span>
       </v-toolbar-title>
@@ -103,7 +103,6 @@ export default {
 @font-face {
   font-family: 'Montserrat';
   src: url('../public/fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
-  /* Dodaj dodatkowe formaty czcionki, jeśli są dostępne */
 }
 
 body {
@@ -112,6 +111,7 @@ body {
 .v-toolbar {
   padding: 10px !important;
   height: inherit !important;
+  box-shadow: 5px 4px 39px rgba(0, 0, 0, 0.15) !important;
 }
 
 .v-main {
@@ -121,7 +121,16 @@ body {
   background-color: #f1f1f1 !important;
   margin-top: 36px;
   padding: 24px;
-  box-shadow: 5px 4px 39px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 5px 4px 39px rgba(0, 0, 0, 0.15) !important;
+}
+
+button {
+  margin: 0 20px;
+  padding: 1% 3%;
+  border-radius: 10px;
+  background-color: #4094E1;
+  color: #FFFFFF;
+  font-width: bold;
 }
 
 
