@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import axiosInstance from "@/axios-api";
 
 export default {
@@ -40,15 +40,16 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['loadCategories']),
     addCategory() {
-      // axiosInstance.post('/category/', )
-      //   .then(() => {
-      //     console.log('dodano kategorie')
-      //     this.$emit('close-dialog')
-      //   })
-      //   .catch(err => {
-      //     console.log(err)
-      //   })
+      axiosInstance.post('/category/', {name: this.newCategoryName} )
+        .then(() => {
+          this.loadCategories()
+          this.$emit('close-dialog')
+        })
+        .catch(err => {
+          console.log(err)
+        })
 
       this.$emit('close-dialog')
     }
