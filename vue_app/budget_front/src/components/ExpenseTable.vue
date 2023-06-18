@@ -1,35 +1,43 @@
 <template>
-  <v-card>
-    <div class="table-header">
-      <h1>Wydatki</h1>
-      <button @click="addExpenseDialog = true">dodaj wydatek</button>
-    </div>
-    <v-data-table
-        :headers="headers"
-        :items="getActualExpenses || []"
-        :items-per-page="5"
-        class="elevation-1"
-        :search="search"
-    >
-      <template v-slot:top>
-        <v-text-field
-            v-model="search"
-            label="Szukaj wydatku"
-            class="mx-4"
-        ></v-text-field>
-      </template>
-      <template v-slot:[`item.title`]="{ item }">
-        {{ capitalize(item.title) }}
-      </template>
-    </v-data-table>
-  </v-card>
+  <div>
+    <v-card>
+      <div class="table-header">
+        <h1>Wydatki</h1>
+        <button @click="addExpenseDialog = !addExpenseDialog">dodaj wydatek</button>
+      </div>
+      <v-data-table
+          :headers="headers"
+          :items="getActualExpenses || []"
+          :items-per-page="5"
+          class="elevation-1"
+          :search="search"
+      >
+        <template v-slot:top>
+          <v-text-field
+              v-model="search"
+              label="Szukaj wydatku"
+              class="mx-4"
+          ></v-text-field>
+        </template>
+        <template v-slot:[`item.title`]="{ item }">
+          {{ capitalize(item.title) }}
+        </template>
+      </v-data-table>
+    </v-card>
+    <v-dialog v-model="addExpenseDialog" max-width="600">
+      <add-expense v-if="addExpenseDialog" @close-dialog="addExpenseDialog=false"/>
+    </v-dialog>
+  </div>
+
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import AddExpense from "@/components/forms/AddExpense";
 
 export default {
   name: "ExpenseTable",
+  components: {AddExpense},
   data() {
     return {
       search: '',
