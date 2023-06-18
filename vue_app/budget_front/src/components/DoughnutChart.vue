@@ -9,12 +9,12 @@
       <span class="period-sum">{{ periodSum }}</span>
     </div>
     <div class="chart-navigation">
-      <button @click="showPreviousPeriod">poprzedni okres</button>
+      <button class="blue-button" @click="showPreviousPeriod">poprzedni okres</button>
       <div class="date-div">
         {{ prettyDate }}
       </div>
 
-      <button @click="showNextPeriod">następny okres</button>
+      <button class="blue-button" @click="showNextPeriod">następny okres</button>
     </div>
   </v-card>
 </template>
@@ -80,7 +80,7 @@ export default {
     ...mapActions(['setActualExpenses']),
     getCategoryData() {
       const categories = {};
-      const labels = [];
+      let labels = [];
       const amounts = [];
       const colors = [];
 
@@ -100,6 +100,7 @@ export default {
         amounts.push(categories[category]);
         colors.push(getRandomColor());
       }
+      labels = labels.map(lab => `${lab} ${categories[lab]}`)
 
       return {
         labels,
@@ -189,6 +190,7 @@ function getRandomColor() {
 .chart-navigation {
   display: flex;
   justify-content: center;
+  align-items: baseline;
 }
 
 .doughnut-div {
@@ -210,12 +212,4 @@ function getRandomColor() {
   font-size: large;
 }
 
-button {
-  margin: 20px;
-  padding: 1% 3%;
-  border-radius: 10px;
-  background-color: #4094E1;
-  color: #FFFFFF;
-  font-width: bold;
-}
 </style>

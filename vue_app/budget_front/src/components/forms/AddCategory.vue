@@ -8,8 +8,8 @@
         :rules="rules"
     />
     <div class="card-actions">
-      <button @click="addCategory" :disabled="!validForm">dodaj</button>
-      <button @click="$emit('close-dialog')">anuluj</button>
+      <button class="blue-button" @click="addCategory" :disabled="!validForm">dodaj</button>
+      <button class="blue-button" @click="$emit('close-dialog')">anuluj</button>
     </div>
   </v-card>
 </template>

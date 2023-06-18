@@ -124,7 +124,7 @@ body {
   box-shadow: 5px 4px 39px rgba(0, 0, 0, 0.15) !important;
 }
 
-button {
+.blue-button {
   margin: 0 20px;
   padding: 1% 3%;
   border-radius: 10px;

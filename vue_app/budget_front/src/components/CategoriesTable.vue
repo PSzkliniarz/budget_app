@@ -3,7 +3,7 @@
     <v-card>
       <div class="table-header">
         <h1>Kategorie</h1>
-        <button @click="addCategoryDialog = !addCategoryDialog">dodaj kategorie</button>
+        <button class="blue-button" @click="addCategoryDialog = !addCategoryDialog">dodaj kategorie</button>
       </div>
       <v-data-table
           :headers="headers"
