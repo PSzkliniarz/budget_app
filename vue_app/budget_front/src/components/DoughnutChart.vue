@@ -199,17 +199,24 @@ function getRandomColor() {
 
 .period-sum {
   position: absolute;
-  top: 52%;
+  top: 54%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-weight: bold;
-  font-size: 3.5rem;
+  font-size: 3.4rem;
 }
 
 .date-div {
   margin-top: 35px;
   font-weight: bold;
   font-size: large;
+}
+
+@media (max-width: 450px) {
+  .period-sum {
+    top: 62%;
+    font-size: 2rem;
+  }
 }
 
 </style>

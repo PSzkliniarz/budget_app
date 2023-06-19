@@ -3,7 +3,7 @@
     <v-card>
       <div class="table-header">
         <h1>Wydatki</h1>
-        <button @click="addExpenseDialog = !addExpenseDialog">dodaj wydatek</button>
+        <button class="blue-button" @click="addExpenseDialog = !addExpenseDialog">dodaj wydatek</button>
       </div>
       <v-data-table
           :headers="headers"
@@ -22,10 +22,27 @@
         <template v-slot:[`item.title`]="{ item }">
           {{ capitalize(item.title) }}
         </template>
+        <template v-slot:[`item.delete`] ="{item}">
+          <v-icon
+            @click="selectToDelete(item)"
+            >
+            mdi-delete
+          </v-icon>
+        </template>
       </v-data-table>
     </v-card>
     <v-dialog v-model="addExpenseDialog" max-width="600">
       <add-expense v-if="addExpenseDialog" @close-dialog="addExpenseDialog=false"/>
+    </v-dialog>
+    <v-dialog v-model="deleteExpenseDialog" max-width="600">
+      <delete-dialog
+          v-if="deleteExpenseDialog"
+          @close-dialog="deleteExpenseDialog=false"
+          :header="deleteDialogHeader"
+          :text="deleteDialogText"
+          @delete-item="deleteExpense"
+          @close-delete-dialog="deleteExpenseDialog=false"
+      />
     </v-dialog>
   </div>
 
@@ -34,14 +51,20 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import AddExpense from "@/components/forms/AddExpense";
+import DeleteDialog from "@/components/forms/DeleteDialog";
+import axiosInstance from "@/axios-api";
 
 export default {
   name: "ExpenseTable",
-  components: {AddExpense},
+  components: {AddExpense, DeleteDialog},
   data() {
     return {
       search: '',
       addExpenseDialog: false,
+      deleteExpenseDialog: false,
+      deleteDialogHeader: 'Usuń wydatek',
+      deleteDialogText: '',
+      itemToDelete: null
     }
   },
   computed: {
@@ -52,6 +75,7 @@ export default {
         {text: 'Wartość', value: 'amount'},
         {text: 'Data', value: 'data'},
         {text: 'Kategoria', value: 'category_name'},
+        {text: 'Usuń', value: 'delete'},
       ]
     },
   },
@@ -59,6 +83,22 @@ export default {
     ...mapActions(['loadExpenses']),
     capitalize(str) {
       return str[0].toUpperCase() + str.slice(1);
+    },
+    selectToDelete(item) {
+      this.itemToDelete = item
+      this.deleteDialogText = `Czy na pewno chcesz usunąc ${item.title} z dnia ${item.data}?`
+      this.deleteExpenseDialog = true
+      console.log(item)
+    },
+    deleteExpense(){
+      this.deleteExpenseDialog = false
+      axiosInstance.delete(`/expense/${this.itemToDelete.id}/`)
+          .then(() => {
+            this.loadExpenses()
+          })
+          .catch(err => {
+            console.log(err)
+          })
     }
   },
   created() {
@@ -75,13 +115,4 @@ export default {
   align-items: center;
 }
 
-button {
-  margin: 20px;
-  margin-top: 0;
-  padding: 1% 3%;
-  border-radius: 10px;
-  background-color: #4094E1;
-  color: #FFFFFF;
-  font-width: bold;
-}
 </style>
