@@ -44,9 +44,8 @@ export default {
       isMobile: false,
       menuItems: [
         { title: 'Strona główna', icon: 'mdi-home' },
-        { title: 'Twoje kategorie', icon: 'mdi-home' },
-        { title: 'O nas', icon: 'mdi-information' },
-        { title: 'Kontakt', icon: 'mdi-email' }
+        { title: 'Twoje kategorie', icon: 'mdi-view-list' },
+        { title: 'Wyloguj', icon: 'mdi-logout' }
       ]
     };
   },
@@ -79,13 +78,10 @@ export default {
         case 'Strona główna':
           this.$router.push('/');
           break;
-        case 'O nas':
-          this.$router.push('/about');
-          break;
         case 'Twoje kategorie':
           this.$router.push('/categories');
           break;
-        case 'Kontakt':
+        case 'Wyloguj':
           this.$router.push('/logout');
           break;
         default:
@@ -131,6 +127,11 @@ body {
   background-color: #4094E1;
   color: #FFFFFF;
   font-width: bold;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 

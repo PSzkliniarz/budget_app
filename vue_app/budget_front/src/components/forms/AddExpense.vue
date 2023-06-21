@@ -1,7 +1,7 @@
 <template>
 
   <v-card class="form-card">
-  <h1>Add expense</h1>
+  <h1>Dodaj wydatek</h1>
     <v-text-field
         v-model="newExpense.title"
         label="Nazwa wydatku"
@@ -93,8 +93,4 @@ export default {
   justify-content: space-between;
 }
 
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
 </style>

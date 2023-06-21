@@ -1,54 +1,78 @@
 <template>
-  <div class="container text-dark">
-    <div class="row justify-content-md-center">
-      <div class="col-md-5 p-3 login justify-content-md-center">
-        <h1 class="h3 mb-3 font-weight-normal text-center">Please sign in</h1>
-
-        <p v-if="incorrectAuth">Incorrect username or password entered - please try again</p>
-        <form v-on:submit.prevent="login">
-          <div class="form-group">
-            <input type="text" name="username" id="user" v-model="username" class="form-control" placeholder="Username">
-          </div>
-          <div class="form-group">
-            <input type="password" name="password" id="pass" v-model="password" class="form-control" placeholder="Password">
-          </div>
-          <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
-        </form>
-
+  <div class="v-card-container">
+    <v-card width="600" class="mt-0">
+      <h1>Login</h1>
+      {{ incorrectAuth }}
+      <v-text-field v-model="username" label="Login" :rules="usernameRules"/>
+      <v-text-field v-model="password" label="Password" type="password" :rules="passwordRules"/>
+      <div class="button-container">
+        <p v-if="incorrectAuth" style="color: red; margin: -10px auto 10px auto">Nieprawidłowy login lub hasło</p>
+        <button class="blue-button" @click="login" :disabled="!isFormValid">Zaloguj</button>
+        <button @click="$router.push('/registration')" class="register-button">Nie masz konta? Zarejestruj się</button>
       </div>
-    </div>
+    </v-card>
   </div>
 </template>
 
 <script>
 export default {
   name: "LoginView",
-  data () {
+  data() {
     return {
       username: '',
       password: '',
-      incorrectAuth: false
+      incorrectAuth: false,
+
+      usernameRules: [
+        v => !!v || 'Login jest wymagany',
+      ],
+      passwordRules: [
+        v => !!v || 'Hasło jest wymagane',
+      ],
+    }
+  },
+  computed: {
+    isFormValid() {
+      return this.username && this.password;
     }
   },
   methods: {
-    login () {
+    login() {
       this.$store.dispatch('userLogin', {
         username: this.username,
         password: this.password
+      }).then(() => {
+        this.$router.push({name: 'home'})
+      }).catch(err => {
+        console.log(err)
+        this.incorrectAuth = true
       })
-          .then( () => {
-            this.$router.push({name: 'home'})
-          })
-          .catch(err => {
-            console.log(err)
-            this.incorrectAuth = true
-          })
-
     }
   }
 }
 </script>
 
 <style scoped>
+.v-card-container {
+  height: 91vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+v-card {
+  height: fit-content;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.register-button {
+  margin-top: 15px;
+  color: #4094E1;
+}
 </style>

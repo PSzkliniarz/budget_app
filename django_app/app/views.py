@@ -1,5 +1,8 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.contrib.auth.models import User
+from rest_framework import generics
+from .serializers import UserSerializer
 
 from .models import Expense, Category
 from .serializers import ExpenseSerializer, CategorySerializer
@@ -26,3 +29,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
         user = self.request.user
         queryset = Category.objects.filter(user=user)
         return queryset
+
+
+class CreateUserView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

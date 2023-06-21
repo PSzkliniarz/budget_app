@@ -1,7 +1,7 @@
 <template>
 
   <v-card class="form-card">
-    <h1>Add Category</h1>
+    <h1>Dodaj kategorie</h1>
     <v-text-field
         v-model="newCategoryName"
         label="Nazwa kategori"
@@ -72,8 +72,4 @@ export default {
   justify-content: space-between;
 }
 
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
 </style>
