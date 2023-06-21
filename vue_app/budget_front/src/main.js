@@ -17,6 +17,14 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
+const accessToken = localStorage.getItem('access_token')
+const refreshToken = localStorage.getItem('refresh_token')
+
+if (accessToken && refreshToken) {
+  store.commit('updateStorage', { access: accessToken, refresh: refreshToken })
+}
+
 new Vue({
   router,
   store,

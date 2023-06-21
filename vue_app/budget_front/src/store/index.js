@@ -6,8 +6,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        accessToken: null,
-        refreshToken: null,
+        accessToken: localStorage.getItem('access_token') || null,
+        refreshToken: localStorage.getItem('refresh_token') || null,
 
         expenses: '',
         categories: '',
@@ -26,6 +26,9 @@ export default new Vuex.Store({
             state.accessToken = access
             state.refreshToken = refresh
 
+            localStorage.setItem('access_token', access);
+            localStorage.setItem('refresh_token', refresh);
+
             state.expenses = ''
             state.categories = ''
             state.actualExpenses = ''
@@ -33,6 +36,9 @@ export default new Vuex.Store({
         destroyToken(state) {
             state.accessToken = null
             state.refreshToken = null
+
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
         },
 
         SET_EXPENSES(state, payload) {
