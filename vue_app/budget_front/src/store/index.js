@@ -52,7 +52,7 @@ export default new Vuex.Store({
             }
         },
         userLogin(context, userCredentials) {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
                 axiosInstance.post('/api-token/', {
                     username: userCredentials.username,
                     password: userCredentials.password
@@ -60,6 +60,9 @@ export default new Vuex.Store({
                     .then(response => {
                         context.commit('updateStorage', {access: response.data.access, refresh: response.data.refresh});
                         resolve();
+                    })
+                    .catch(error => {
+                        reject(error);
                     });
             });
         },
