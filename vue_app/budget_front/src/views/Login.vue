@@ -13,6 +13,7 @@
             <input type="password" name="password" id="pass" v-model="password" class="form-control" placeholder="Password">
           </div>
           <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+          <button @click="$router.push('/registration')" class="btn btn-lg btn-primary btn-block">Rejestracja</button>
         </form>
 
       </div>

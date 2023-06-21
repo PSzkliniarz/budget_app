@@ -6,7 +6,7 @@
     <div class="doughnut-div">
       <Doughnut v-if="filteredExpenses.length > 0" :data="chartData" :options="chartOptions" class="doughnut-chart"/>
       <h2 v-if="filteredExpenses.length === 0">Brak wydatków w tym okresie</h2>
-      <span class="period-sum">{{ periodSum }}</span>
+      <span v-if="filteredExpenses.length > 0" class="period-sum">{{ periodSum }}</span>
     </div>
     <div class="chart-navigation">
       <button class="blue-button" @click="showPreviousPeriod">poprzedni okres</button>

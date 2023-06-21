@@ -88,7 +88,6 @@ export default {
       this.itemToDelete = item
       this.deleteDialogText = `Czy na pewno chcesz usunąc ${item.title} z dnia ${item.data}?`
       this.deleteExpenseDialog = true
-      console.log(item)
     },
     deleteExpense(){
       this.deleteExpenseDialog = false
