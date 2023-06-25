@@ -9,7 +9,7 @@
           :headers="headers"
           :items="getActualExpenses || []"
           :items-per-page="5"
-          class="elevation-1 mt-2"
+          class="elevation-1 mt-5"
           :search="search"
       >
         <template v-slot:top>

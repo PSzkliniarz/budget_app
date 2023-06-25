@@ -1,7 +1,8 @@
 <template>
   <v-app>
-   <v-app-bar app>
-      <v-app-bar-nav-icon @click="toggleDrawer" style="background-color: #FFFFFF; color: #4094E1; border: 3px solid #4094E1"/>
+    <v-app-bar app>
+      <v-app-bar-nav-icon @click="toggleDrawer"
+                          style="background-color: #FFFFFF; color: #4094E1; border: 3px solid #4094E1"/>
       <v-toolbar-title style="width: 100%; text-align: center; font-size: 2rem; ">
         Aplikacja <span style="color: #4094E1; font-weight: bold">Moje wydatki</span>
       </v-toolbar-title>
@@ -9,11 +10,11 @@
 
     <v-navigation-drawer
         v-if="drawerOpen"
-      v-model="drawerOpen"
-      absolute
-      bottom
-      temporary
-      :style="drawerStyle"
+        v-model="drawerOpen"
+        absolute
+        bottom
+        temporary
+        :style="drawerStyle"
     >
       <v-list>
         <v-list-item v-for="(item, index) in menuItems" :key="index" @click="selectMenuItem(item)">
@@ -39,13 +40,14 @@ export default {
 
   data() {
     return {
+      scrollTop: 0,
       drawerOpen: false,
       miniVariant: false,
       isMobile: false,
       menuItems: [
-        { title: 'Strona główna', icon: 'mdi-home' },
-        { title: 'Twoje kategorie', icon: 'mdi-view-list' },
-        { title: 'Wyloguj', icon: 'mdi-logout' }
+        {title: 'Strona główna', icon: 'mdi-home'},
+        {title: 'Twoje kategorie', icon: 'mdi-view-list'},
+        {title: 'Wyloguj', icon: 'mdi-logout'}
       ]
     };
   },
@@ -59,17 +61,29 @@ export default {
   computed: {
     drawerStyle() {
       if (this.isMobile) {
-        // Zwracaj style inline w zależności od szerokości ekranu
+        const windowHeight = window.innerHeight;
         return {
           height: '200px',
-          backgroundColor: 'lightblue'
+          top: `${this.scrollTop + windowHeight - 200}px`
         };
       } else {
-        return {}; // Puste style, gdy szerokość ekranu jest większa
+        return {
+          top: `${this.scrollTop}px`,
+        };
+      }
+    }
+  },
+  watch: {
+    drawerOpen(newVal) {
+      if (newVal) {
+        this.calculateScrollTop();
       }
     }
   },
   methods: {
+    calculateScrollTop() {
+      this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    },
     toggleDrawer() {
       this.drawerOpen = !this.drawerOpen;
     },
@@ -89,7 +103,7 @@ export default {
       }
     },
     checkMobile() {
-      this.isMobile = window.innerWidth <= 1265; // Dostosuj szerokość do swojego poziomu responsywności
+      this.isMobile = window.innerWidth <= 1265;
       this.miniVariant = this.isMobile;
     }
   }
@@ -104,6 +118,7 @@ export default {
 body {
   font-family: 'Montserrat', sans-serif;
 }
+
 .v-toolbar {
   padding: 10px !important;
   height: inherit !important;
@@ -113,6 +128,7 @@ body {
 .v-main {
   background-color: #E3E3E3;
 }
+
 .v-card {
   background-color: #f1f1f1 !important;
   margin-top: 36px;
@@ -133,6 +149,5 @@ button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
-
 
 </style>
