@@ -2,7 +2,6 @@
   <div class="v-card-container">
     <v-card width="600" class="mt-0">
       <h1>Login</h1>
-      {{ incorrectAuth }}
       <v-text-field v-model="username" label="Login" :rules="usernameRules"/>
       <v-text-field v-model="password" label="Password" type="password" :rules="passwordRules"/>
       <div class="button-container">
