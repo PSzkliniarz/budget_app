@@ -29,7 +29,7 @@ class CategoryCRUDTestCase(APITestCase):
 
     def test_update_category(self):
         category = Category.objects.create(name='Test Category', user=self.user)
-        url = reverse('category-detail', args=[category.pk])  # URL endpointu szczegółów kategorii
+        url = reverse('category-detail', args=[category.pk])
         data = {
             'name': 'Updated Category',
         }
@@ -39,7 +39,7 @@ class CategoryCRUDTestCase(APITestCase):
 
     def test_delete_category(self):
         category = Category.objects.create(name='Test Category', user=self.user)
-        url = reverse('category-detail', args=[category.pk])  # URL endpointu szczegółów kategorii
+        url = reverse('category-detail', args=[category.pk])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Category.objects.count(), 0)
