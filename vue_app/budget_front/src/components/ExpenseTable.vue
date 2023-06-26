@@ -9,7 +9,7 @@
           :headers="headers"
           :items="getActualExpenses || []"
           :items-per-page="5"
-          class="elevation-1"
+          class="elevation-1 mt-5"
           :search="search"
       >
         <template v-slot:top>
@@ -75,7 +75,7 @@ export default {
         {text: 'Wartość', value: 'amount'},
         {text: 'Data', value: 'data'},
         {text: 'Kategoria', value: 'category_name'},
-        {text: 'Usuń', value: 'delete'},
+        {text: 'Usuń', value: 'delete', align: 'end'},
       ]
     },
   },
@@ -112,6 +112,10 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.blue-button {
+  padding: 0.5% 2%;
 }
 
 </style>

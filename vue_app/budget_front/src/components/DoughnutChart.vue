@@ -212,6 +212,11 @@ function getRandomColor() {
   font-size: large;
 }
 
+.blue-button {
+  padding: 0.5% 2%;
+}
+
+
 @media (max-width: 450px) {
   .period-sum {
     top: 62%;

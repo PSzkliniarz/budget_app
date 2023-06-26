@@ -9,7 +9,7 @@
           :headers="headers"
           :items="getCategories || []"
           :items-per-page="5"
-          class="elevation-1"
+          class="elevation-1 mt-5"
           :search="search"
       >
         <template v-slot:top>
@@ -28,8 +28,6 @@
           >
             mdi-pencil
           </v-icon>
-          <!--        </template>-->
-          <!--        <template v-slot:[`item.delete`]="{item}">-->
           <v-icon
               @click="selectToDelete(item)"
           >
@@ -69,7 +67,6 @@ import {mapActions, mapGetters} from "vuex";
 import AddCategory from "@/components/forms/AddCategory";
 import DeleteDialog from "@/components/forms/DeleteDialog";
 import axiosInstance from "@/axios-api";
-// import axiosInstance from "@/axios-api";
 
 export default {
   name: "CategoriesTable",
@@ -77,6 +74,7 @@ export default {
   data() {
     return {
       search: '',
+      customRowsPerPageText: 'Liczba wierszy na stronę:',
       addCategoryDialog: false,
       editCategoryDialog: false,
       editDialogHeader: 'Zmień nazwę kategorii',
@@ -118,7 +116,7 @@ export default {
     editCategory(newCategoryName) {
       this.editCategoryDialog = false
       axiosInstance.put(`/category/${this.selectedItem.id}/`, {
-        id:this.selectedItem.id,
+        id: this.selectedItem.id,
         name: newCategoryName
       })
           .then(() => {
@@ -153,7 +151,8 @@ export default {
   align-items: center;
 }
 
-.text-align-end {
-  text-align: end;
+.blue-button {
+  padding: 0.5% 2%;
 }
+
 </style>
